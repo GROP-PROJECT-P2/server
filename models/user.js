@@ -43,7 +43,10 @@ module.exports = (sequelize, DataTypes) => {
         notNull: { msg: "Password is required" }
       }
     },
-    status: DataTypes.STRING,
+    status: {
+      type: DataTypes.STRING,
+      defaultValue: 'Offline'
+    },
     avatar: DataTypes.STRING
   }, {
     sequelize,
