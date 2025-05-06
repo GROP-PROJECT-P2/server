@@ -1,4 +1,3 @@
-const { comparePassword } = require('../helpers/bcrypt');
 const { signToken } = require('../helpers/jwt');
 const { User } = require('../models')
 const { OAuth2Client } = require('google-auth-library');
@@ -16,7 +15,7 @@ module.exports = class UserController {
             if (!confirmPassword) {
                 throw { name: 'badRequest', message: "Confirm password is required" }
             }
-            
+
             const user = await User.create(req.body);
 
             res.status(201).json({
@@ -38,13 +37,13 @@ module.exports = class UserController {
                 throw { name: 'badRequest', message: "Username is required" }
             }
 
-            const user = await User.findOne({ 
-                where: { 
-                    username 
+            const user = await User.findOne({
+                where: {
+                    username
                 },
                 attributes: { exclude: ['createdAt', 'updatedAt', 'password'] }
             })
-            
+
             if (!user) {
                 throw { name: 'Unauthorized', message: "Invalid username" }
             }
@@ -75,18 +74,19 @@ module.exports = class UserController {
                 user = await User.create({
                     username: payload.name,
                     email: payload.email,
-                    avatarUrl: payload.picture
+                    avatar: payload.picture,
+                    password: 'oauth_dummy'
                 });
             }
 
             const access_token = signToken({ id: user.id });
-            return res.status(200).json({
+            res.status(200).json({
                 access_token,
                 user: {
                     id: user.id,
                     email: user.email,
                     username: user.username,
-                    avatarUrl: user.avatarUrl,
+                    avatar: user.avatar,
                 }
             });
 
