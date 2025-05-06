@@ -31,29 +31,25 @@ module.exports = class UserController {
 
     static async login(req, res, next) {
         try {
-            const { email, password } = req.body
-            if (!email) {
-                throw { name: 'badRequest', message: "Email is required" }
+            const { username } = req.body
+            if (!username) {
+                throw { name: 'badRequest', message: "Username is required" }
             }
 
-            if (!password) {
-                throw { name: 'badRequest', message: "Password is required" }
-            }
-
-            const user = await User.findOne({ where: { email } })
+            const user = await User.findOne({ 
+                where: { 
+                    username 
+                },
+                attributes: { exclude: ['createdAt', 'updatedAt', 'password'] }
+            })
             
             if (!user) {
-                throw { name: 'Unauthorize', message: "Invalid email/password" }
-            }
-
-            const isValidPassword = comparePassword(password, user.password)
-
-            if (!isValidPassword) {
-                throw { name: 'Unauthorize', message: "Invalid email/password" }
+                throw { name: 'Unauthorize', message: "Invalid username" }
             }
 
             const access_token = signToken({ id: user.id })
-            res.status(200).json({ access_token })
+
+            res.status(200).json({ access_token, user })
         } catch (err) {
             console.error(err);
             next(err);
