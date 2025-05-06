@@ -44,7 +44,7 @@ module.exports = class UserController {
             })
             
             if (!user) {
-                throw { name: 'Unauthorize', message: "Invalid username" }
+                throw { name: 'Unauthorized', message: "Invalid username" }
             }
 
             const access_token = signToken({ id: user.id })
