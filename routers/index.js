@@ -10,6 +10,7 @@ router.get('/', (req, res) => {
 
 router.post("/register", UserController.register);
 router.post("/login", UserController.login);
+router.post("/login/google", UserController.loginGoogle);
 
 router.get("/rooms", RoomController.getRooms);
 router.post("/rooms", RoomController.createRoom);
