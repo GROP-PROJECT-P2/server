@@ -111,4 +111,50 @@ module.exports = class MessageController {
             next(error);
         }
     }
+
+    static async updateMessage(req, res, next) {
+        try {
+            const { roomId, messageId } = req.params;
+            const { content } = req.body;
+
+            const checkMember = await RoomUser.findOne({
+                where: {
+                    RoomId: roomId,
+                    UserId: req.user.id,
+                },
+            });
+
+            if (!checkMember) {
+                throw { name: 'Forbidden', message: 'You are not a member of this room' };
+            }
+
+            const message = await Message.findOne({
+                where: {
+                    id: messageId,
+                    RoomId: roomId,
+                },
+            });
+
+            if (!message) {
+                throw { name: 'notFound', message: 'Message not found' };
+            }
+
+            const updatedMessage = await Message.update(
+                {
+                    content,
+                },
+                {
+                    where: {
+                        id: messageId,
+                    },
+                    returning: true,
+                }
+            );
+
+            res.status(200).json(updatedMessage[1][0]);
+
+        } catch (error) {
+            next(error);
+        }
+    }
 }
