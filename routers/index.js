@@ -8,6 +8,7 @@ router.get('/', (req, res) => {
 })
 
 router.get("/rooms", RoomController.getRooms);
+router.post("/rooms", RoomController.createRoom);
 
 router.use(errorHandler)
 
