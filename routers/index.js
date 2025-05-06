@@ -12,6 +12,7 @@ router.post("/register", UserController.register);
 router.post("/login", UserController.login);
 
 router.get("/rooms", RoomController.getRooms);
+router.post("/rooms", RoomController.createRoom);
 
 router.use(errorHandler)
 
