@@ -3,7 +3,11 @@ const { RoomUser, Room } = require('../models');
 module.exports = class RoomController {
     static async getRooms(req, res, next) {
         try {
-            const rooms = await Room.findAll();
+            const rooms = await Room.findAll({
+                where: {
+                    id: req.user.id,
+                }
+            });
             res.status(200).json(rooms);
         } catch (err) {
             next(err);
@@ -16,7 +20,7 @@ module.exports = class RoomController {
             const newRoom = await Room.create({ name });
 
             const newRoomUser = await RoomUser.create({
-                UserId: 1,
+                UserId: req.user.id,
                 RoomId: newRoom.id,
             });
             

@@ -5,7 +5,7 @@ const errorHandler = (err, req, res, next) => {
         return res.status(400).json({ message: err.message })
     }
 
-    if (err.name === 'Unauthorize') {
+    if (err.name === 'Unauthorized') {
         return res.status(401).json({ message: err.message })
     }
     
