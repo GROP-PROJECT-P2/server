@@ -1,4 +1,3 @@
-const { Room } = require('../models');
 const { RoomUser } = require('../models');
 
 module.exports = class RoomController {
@@ -6,8 +5,8 @@ module.exports = class RoomController {
         try {
             const rooms = await Room.findAll();
             res.status(200).json(rooms);
-        } catch (error) {
-            next(error);
+        } catch (err) {
+            next(err);
         }
     }
 
