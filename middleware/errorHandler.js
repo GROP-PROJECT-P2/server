@@ -12,6 +12,10 @@ const errorHandler = (err, req, res, next) => {
     if (err.name === 'Forbidden') {
         return res.status(403).json({ message: err.message })
     }
+
+    if (err.name === 'notFound') {
+        return res.status(404).json({ message: err.message })
+    }
     
     if (err.name === "SequelizeValidationError" || err.name === "SequelizeUniqueConstraintError") {
         return res.status(400).json({ message: err.errors[0].message });

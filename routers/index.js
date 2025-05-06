@@ -21,6 +21,7 @@ router.post("/rooms", RoomController.createRoom);
 
 router.post("/messages/:roomId", MessageController.sendMessage);
 router.get("/messages/:roomId", MessageController.getMessage);
+router.delete("/messages/:roomId/:messageId", MessageController.deleteMessage);
 
 router.use(errorHandler)
 
