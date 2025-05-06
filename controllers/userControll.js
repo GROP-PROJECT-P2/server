@@ -5,6 +5,16 @@ const { User } = require('../models')
 module.exports = class UserController {
     static async register(req, res, next) {
         try {
+            const { password, confirmPassword } = req.body
+
+            if (confirmPassword !== password) {
+                throw { name: 'badRequest', message: "Password and confirm password must be the same" }
+            }
+
+            if (!confirmPassword) {
+                throw { name: 'badRequest', message: "Confirm password is required" }
+            }
+            
             const user = await User.create(req.body);
 
             res.status(201).json({
@@ -23,19 +33,25 @@ module.exports = class UserController {
         try {
             const { email, password } = req.body
             if (!email) {
-                next({ name: 'HttpError', status: 400, message: "Email is required" })
+                throw { name: 'badRequest', message: "Email is required" }
             }
+
             if (!password) {
-                next({ name: 'HttpError', status: 400, message: "Password is required" })
+                throw { name: 'badRequest', message: "Password is required" }
             }
+
             const user = await User.findOne({ where: { email } })
+            
             if (!user) {
-                next({ name: 'HttpError', status: 401, message: "Invalid email/password" })
+                throw { name: 'Unauthorize', message: "Invalid email/password" }
             }
+
             const isValidPassword = comparePassword(password, user.password)
+
             if (!isValidPassword) {
-                next({ name: 'HttpError', status: 401, message: "Invalid email/password" })
+                throw { name: 'Unauthorize', message: "Invalid email/password" }
             }
+
             const access_token = signToken({ id: user.id })
             res.status(200).json({ access_token })
         } catch (err) {
