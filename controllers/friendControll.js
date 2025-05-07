@@ -1,4 +1,4 @@
-const { Friend } = require('../models');
+const { Friend, User } = require('../models');
 
 module.exports = class FriendController {
     static async getFriend(req, res, next) {
@@ -6,10 +6,16 @@ module.exports = class FriendController {
             const { UserId } = req.query;
 
             const whereClause = UserId ? { UserId } : {};
-            const friends = await Friend.findAll({ where: whereClause });
+            const friends = await Friend.findAll({
+                where: whereClause,
+                include: [{
+                    model: User,
+                    attributes: ['id', 'username', 'avatar', 'status']
+                }]
+            });
             console.log(friends, "<<<<<<");
 
-            if (friends.length === 0) {
+            if (!friends || friends.length === 0) {
                 throw { name: 'notFound', message: 'No friends found' };
             }
 
