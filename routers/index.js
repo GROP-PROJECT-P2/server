@@ -19,6 +19,7 @@ router.use(authentication)
 
 router.get("/rooms", RoomController.getRooms);
 router.post("/rooms", RoomController.createRoom);
+router.get('/rooms/join/:inviteCode', RoomController.shareRoom)
 
 router.get("/friends", FriendController.getFriend);
 router.post("/friends", FriendController.addFriend);

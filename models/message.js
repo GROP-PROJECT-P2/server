@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   Message.init({
     content: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull: false,
       validate: {
         notEmpty: { msg: "Content is required" },
