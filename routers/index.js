@@ -17,18 +17,18 @@ router.post("/login/google", UserController.loginGoogle);
 
 router.use(authentication)
 
-router.get("/rooms", RoomController.getRooms);
-router.post("/rooms", RoomController.createRoom);
-router.get('/rooms/join/:inviteCode', RoomController.shareRoom)
+router.get("/groups", RoomController.getRooms);
+router.post("/groups", RoomController.createRoom);
+router.get('/groups/join/:inviteCode', RoomController.shareRoom)
 
 router.get("/friends", FriendController.getFriend);
 router.post("/friends", FriendController.addFriend);
 router.patch("/friends/:id", FriendController.acceptFriend);
 
-router.post("/messages/:roomId", MessageController.sendMessage);
-router.get("/messages/:roomId", MessageController.getMessage);
-router.delete("/messages/:roomId/:messageId", MessageController.deleteMessage);
-router.put("/messages/:roomId/:messageId", MessageController.updateMessage);
+router.post("/groups/:groupId", MessageController.sendMessage);
+router.get("/groups/:groupId", MessageController.getMessage);
+router.delete("/groups/:groupId/:messageId", MessageController.deleteMessage);
+router.put("/groups/:groupId/:messageId", MessageController.updateMessage);
 
 router.use(errorHandler)
 
