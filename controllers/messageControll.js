@@ -3,14 +3,14 @@ const { Message, RoomUser, User, Room } = require('../models');
 module.exports = class MessageController {
     static async sendMessage(req, res, next) {
         try {
-            const { roomId } = req.params;
+            const { groupId } = req.params;
             const { content } = req.body;
 
             if (!content || content === '') {
                 throw { name: 'badRequest', message: 'Message is required' };
             }
 
-            const room = await Room.findByPk(roomId);
+            const room = await Room.findByPk(groupId);
 
             if (!room) {
                 throw { name: 'notFound', message: 'Room not found' };
@@ -18,7 +18,7 @@ module.exports = class MessageController {
 
             const checkMember = await RoomUser.findOne({
                 where: {
-                    RoomId: roomId,
+                    RoomId: groupId,
                     UserId: req.user.id,
                 },
             });
@@ -29,13 +29,13 @@ module.exports = class MessageController {
 
             const newMessage = await Message.create({
                 content,
-                RoomId: roomId,
+                RoomId: groupId,
                 isBot: false,
                 UserId: req.user.id,
             });
 
             const io = req.app.get('io');
-            io.to(`group_${roomId}`).emit(`newMessage`, newMessage);
+            io.to(`group_${groupId}`).emit(`newMessage`, newMessage);
 
             res.status(201).json(newMessage);
         } catch (error) {
@@ -45,11 +45,11 @@ module.exports = class MessageController {
 
     static async getMessage(req, res, next) {
         try {
-            const { roomId } = req.params;
+            const { groupId } = req.params;
 
             const checkMember = await RoomUser.findOne({
                 where: {
-                    RoomId: roomId,
+                    RoomId: groupId,
                     UserId: req.user.id,
                 },
             });
@@ -60,7 +60,7 @@ module.exports = class MessageController {
 
             const messages = await Message.findAll({
                 where: {
-                    RoomId: roomId,
+                    RoomId: groupId,
                 },
                 include: [
                     {
@@ -79,11 +79,11 @@ module.exports = class MessageController {
 
     static async deleteMessage(req, res, next) {
         try {
-            const { roomId, messageId } = req.params;
+            const { groupId, messageId } = req.params;
 
             const checkMember = await RoomUser.findOne({
                 where: {
-                    RoomId: roomId,
+                    RoomId: groupId,
                     UserId: req.user.id,
                 },
             });
@@ -95,7 +95,7 @@ module.exports = class MessageController {
             const message = await Message.findOne({
                 where: {
                     id: messageId,
-                    RoomId: roomId,
+                    RoomId: groupId,
                 },
             });
 
@@ -117,12 +117,12 @@ module.exports = class MessageController {
 
     static async updateMessage(req, res, next) {
         try {
-            const { roomId, messageId } = req.params;
+            const { groupId, messageId } = req.params;
             const { content } = req.body;
 
             const checkMember = await RoomUser.findOne({
                 where: {
-                    RoomId: roomId,
+                    RoomId: groupId,
                     UserId: req.user.id,
                 },
             });
@@ -134,7 +134,7 @@ module.exports = class MessageController {
             const message = await Message.findOne({
                 where: {
                     id: messageId,
-                    RoomId: roomId,
+                    RoomId: groupId,
                 },
             });
 
