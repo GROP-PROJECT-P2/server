@@ -30,6 +30,9 @@ router.get("/groups/:groupId", MessageController.getMessage);
 router.delete("/groups/:groupId/:messageId", MessageController.deleteMessage);
 router.put("/groups/:groupId/:messageId", MessageController.updateMessage);
 
+router.get('/chats', MessageController.getChats);
+router.post('/chats', MessageController.sendMessageAI);
+
 router.use(errorHandler)
 
 module.exports = router

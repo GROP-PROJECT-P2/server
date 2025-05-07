@@ -1,6 +1,43 @@
 const { Message, RoomUser, User, Room } = require('../models');
+const { getAIResponse } = require('../helpers/openAI');
+
+const chats = [{ text: "hello" }];
 
 module.exports = class MessageController {
+    static async getChats(req, res, next) {
+        try {
+            res.status(200).json(chats);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    static async sendMessageAI(req, res, next) {
+        try {
+            const { text } = req.body;
+
+            if (!text || text.trim() === '') {
+                throw { name: 'badRequest', message: 'Message text is required' };
+            }
+
+            const userMessage = { text: text.trim() };
+            chats.push(userMessage);
+
+            const aiResponse = await getAIResponse(text);
+            const aiMessage = { text: aiResponse };
+            chats.push(aiMessage);
+
+            const io = req.app.get('io');
+            if (io) {
+                io.emit('chat.verse', chats);
+            }
+
+            res.status(201).json({ userMessage, aiMessage });
+        } catch (error) {
+            next(error);
+        }
+    }
+
     static async sendMessage(req, res, next) {
         try {
             const { groupId } = req.params;
