@@ -34,6 +34,9 @@ module.exports = class MessageController {
                 UserId: req.user.id,
             });
 
+            const io = req.app.get('io');
+            io.to(`group_${roomId}`).emit(`newMessage`, newMessage);
+
             res.status(201).json(newMessage);
         } catch (error) {
             next(error);
