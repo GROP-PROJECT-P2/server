@@ -5,6 +5,7 @@ const UserController = require('../controllers/userControll.js')
 const errorHandler = require('../middleware/errorHandler.js')
 const authentication = require('../middleware/authentication.js')
 const MessageController = require('../controllers/messageControll.js')
+const FriendController = require('../controllers/friendControll.js')
 
 router.get('/', (req, res) => {
     res.json({ message: 'Hello World!' })
@@ -18,6 +19,10 @@ router.use(authentication)
 
 router.get("/rooms", RoomController.getRooms);
 router.post("/rooms", RoomController.createRoom);
+
+router.get("/friends", FriendController.getFriend);
+router.post("/friends", FriendController.addFriend);
+router.patch("/friends/:id", FriendController.acceptFriend);
 
 router.post("/messages/:roomId", MessageController.sendMessage);
 router.get("/messages/:roomId", MessageController.getMessage);
