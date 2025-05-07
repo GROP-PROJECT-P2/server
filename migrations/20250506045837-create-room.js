@@ -12,6 +12,13 @@ module.exports = {
       name: {
         type: Sequelize.STRING
       },
+      createdBy: {
+        type: Sequelize.INTEGER
+      },
+      inviteCode: {
+        type: Sequelize.STRING,
+        unique: true
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

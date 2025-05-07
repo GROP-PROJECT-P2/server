@@ -27,6 +27,9 @@ module.exports = {
         onUpdate: 'cascade',
         onDelete: 'cascade'
       },
+      role: {
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

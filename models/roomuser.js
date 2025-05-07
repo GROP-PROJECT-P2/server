@@ -31,6 +31,7 @@ module.exports = (sequelize, DataTypes) => {
         notNull: { msg: "UserId is required" }
       }
     },
+    role: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'RoomUser',

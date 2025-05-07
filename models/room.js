@@ -23,6 +23,12 @@ module.exports = (sequelize, DataTypes) => {
         notNull: { msg: "Room is required" }
       }
     },
+    createdBy: DataTypes.INTEGER,
+    inviteCode: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true
+    },
   }, {
     sequelize,
     modelName: 'Room',
