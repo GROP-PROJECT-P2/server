@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       User.hasMany(models.Message)
       User.hasMany(models.RoomUser)
+      User.hasMany(models.Friend)
     }
   }
   User.init({
@@ -45,6 +46,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     status: {
       type: DataTypes.STRING,
+      allowNull: false,
       defaultValue: 'Offline'
     },
     avatar: {
